@@ -1,16 +1,16 @@
-import { PrismaPg } from "@prisma/adapter-pg";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { openAPI } from "better-auth/plugins";
 
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient({
-  adapter: new PrismaPg(process.env.DATABASE_URL),
-});
+import { prisma } from "./db.js"; // aproveita o prisma já configurado
 
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000"],
+  baseURL: process.env.BETTER_AUTH_URL, // opcional, mas você já tem no .env
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8081", // Swagger na própria API
+  ],
   emailAndPassword: {
     enabled: true,
   },
